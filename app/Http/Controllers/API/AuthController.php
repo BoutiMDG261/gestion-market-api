@@ -16,7 +16,11 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
+
+        if(!Auth::attempt($credentials)) {
+            return response(["message" => "Le nom d'utilisateur et/ou le mot de passe saisis sont incorrects."], 403);
+        }
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -28,20 +32,21 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Non autorisé'], 401);
+        return response()->json(['error' => 'Non autorisé.'], 401);
     }
 
     public function register(RegisterRequest $request)
     {
         $user = User::create([
-            'name' => $request->input('name'),
+            'fullname' => $request->input('fullname'),
+            'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password'))
         ]);
 
         $token = Auth::login($user);
 
-        return response()->json(['token' => $token]);
+        return response()->json(['token' => $token, 'message' => "Utilisateur crée avec succes."]);
     }
 
     public function logout()
