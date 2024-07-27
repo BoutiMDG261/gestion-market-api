@@ -44,4 +44,19 @@ class StoreProduitRequest extends FormRequest
             '*.price.min' => 'Le prix du produit ne peut pas être en dessous de 1 Ariary.',
         ];
     }
+
+    	/**
+	 * Utiliser la méthode prepareForValidation pour transformer la requête en un tableau d'objets, même si un seul objet est fourni.
+	 * @return void
+	 */
+	protected function prepareForValidation()
+	{
+		$input = $this->all();
+
+		if (!isset($input[0])) {
+			$input = [$input];
+		}
+
+		$this->replace($input);
+	}
 }
