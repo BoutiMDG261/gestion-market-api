@@ -74,4 +74,18 @@ class ProduitService
 
         return $produit;
     }
+
+    public function triParTable(string $table, string $order): Paginator
+    {
+        $produits = $this->produitManager->triParTable($table, $order);
+
+        return $produits;
+    }
+
+    public function rechercheProduit(string $table, string $motCle): Paginator
+    {
+        $produits = $this->produitManager->rechercheProduit($table, $motCle);
+
+        return $produits;
+    }
 }
