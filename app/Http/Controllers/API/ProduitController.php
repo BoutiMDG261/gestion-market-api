@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateProduitRequest;
 use App\Services\ProduitService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProduitController extends Controller
 {
@@ -145,6 +146,44 @@ class ProduitController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Erreur lors de la suppression du produit.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function triParTable(Request $request): JsonResponse
+    {
+        $table = $request->get('table', 'name');
+        $order = $request->get('orderBy', 'asc');
+
+        try {
+            $produit = $this->produitService->triParTable($table, $order);
+            return response()->json([
+                'message' => "Recupération des produits réussi. Trié par {$table}.",
+                'produit' => $produit
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors du recupération des produits.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function rechercheProduit(Request $request): JsonResponse
+    {
+        $table = $request->get('table', 'name');
+        $motCle = $request->get('key');
+
+        try {
+            $produit = $this->produitService->rechercheProduit($table, $motCle);
+            return response()->json([
+                'message' => "Recupération des produits réussi.",
+                'produit' => $produit
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors du recupération des produits.',
                 'error' => $e->getMessage()
             ], 500);
         }
