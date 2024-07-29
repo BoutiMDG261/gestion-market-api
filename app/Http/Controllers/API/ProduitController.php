@@ -25,7 +25,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->recupererProduit();
             return response()->json([
                 'message' => 'Recupération des produits réussi.',
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -41,7 +41,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->recupererParIdProduit($id);
             return response()->json([
                 'message' => "Recupération du produit: '{$produit->name}' réussi.",
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -59,7 +59,7 @@ class ProduitController extends Controller
             $corbeille = $this->produitService->regarderCorbeille();
             return response()->json([
                 'message' => 'Recupération des produits dans la corbeille réussi.',
-                'produit' => $corbeille
+                'data' => $corbeille
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -75,7 +75,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->restaurationProduit($id);
             return response()->json([
                 'message' => 'Restauration du produit réussi.',
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -92,7 +92,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->ajouterProduit($validatedProduit);
             return response()->json([
                 'message' => 'Ajout de produit réussi.',
-                'produit' => $produit
+                'data' => $produit
             ], 201);
         } catch (Exception $e) {
             return response()->json([
@@ -109,7 +109,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->modifierProduit($id, $validatedProduit);
             return response()->json([
                 'message' => 'Mis à jour de produit réussi.',
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -125,7 +125,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->softDelete($id);
             return response()->json([
                 'message' => 'Produit envoyé dans la corbeille.',
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -141,7 +141,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->destroy($id);
             return response()->json([
                 'message' => 'Produit supprimé définetivement.',
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -160,7 +160,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->triParTable($table, $order);
             return response()->json([
                 'message' => "Recupération des produits réussi. Trié par {$table}.",
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -179,7 +179,7 @@ class ProduitController extends Controller
             $produit = $this->produitService->rechercheProduit($table, $motCle);
             return response()->json([
                 'message' => "Recupération des produits réussi.",
-                'produit' => $produit
+                'data' => $produit
             ], 200);
         } catch (Exception $e) {
             return response()->json([
