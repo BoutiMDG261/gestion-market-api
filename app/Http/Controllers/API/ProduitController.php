@@ -19,10 +19,11 @@ class ProduitController extends Controller
         $this->produitService = $produitService;
     }
 
-    public function recupererProduit(): JsonResponse
+    public function recupererProduit(Request $request): JsonResponse
     {
+        $limit = $request->get('per_page', 10);
         try {
-            $produit = $this->produitService->recupererProduit();
+            $produit = $this->produitService->recupererProduit($limit);
             return response()->json([
                 'message' => 'Recupération des produits réussi.',
                 'data' => $produit
@@ -177,6 +178,14 @@ class ProduitController extends Controller
 
         try {
             $produit = $this->produitService->rechercheProduit($table, $motCle);
+
+            if ($produit->isEmpty()) {
+                return response()->json([
+                    'message' => 'Aucun produit trouvé.',
+                    'data' => []
+                ], 200);
+            }
+
             return response()->json([
                 'message' => "Recupération des produits réussi.",
                 'data' => $produit
