@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProduitManager
 {
-    public function recupererProduit(): Paginator
+    public function recupererProduit($limit): Paginator
     {
-        $produit = Produit::orderBy("name", "asc")->paginate(10);
+        $produit = Produit::orderBy("name", "asc")->paginate($limit);
 
         return $produit;
     }

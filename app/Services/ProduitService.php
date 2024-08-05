@@ -15,9 +15,9 @@ class ProduitService
         $this->produitManager = $produitManager;
     }
 
-    public function recupererProduit(): Paginator
+    public function recupererProduit($limit): Paginator
     {
-        $produit = $this->produitManager->recupererProduit();
+        $produit = $this->produitManager->recupererProduit($limit);
 
         return $produit;
     }
