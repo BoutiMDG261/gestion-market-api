@@ -18,25 +18,25 @@ class AuthController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        if(!Auth::attempt($credentials)) {
-            return response(["message" => "Le nom d'utilisateur et/ou le mot de passe saisis sont incorrects."], 403);
+        // Vérification des identifiants
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => "Le nom d'utilisateur et/ou le mot de passe saisis sont incorrects."], 403);
         }
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = JWTAuth::fromUser($user);
+        // Génération du token JWT
+        $user = Auth::user();
+        $token = JWTAuth::fromUser($user);
 
-            return response()->json([
-                'token' => $token,
-                'user' => $user,
-            ]);
-        }
-
-        return response()->json(['error' => 'Non autorisé.'], 401);
+        // Retourne le token et les informations de l'utilisateur
+        return response()->json([
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
 
     public function register(RegisterRequest $request)
     {
+        // Création du nouvel utilisateur
         $user = User::create([
             'fullname' => $request->input('fullname'),
             'username' => $request->input('username'),
@@ -44,31 +44,37 @@ class AuthController extends Controller
             'password' => bcrypt($request->input('password'))
         ]);
 
+        // Génération du token JWT
         $token = Auth::login($user);
 
-        return response()->json(['token' => $token, 'message' => "Utilisateur crée avec succes."]);
+        // Retourne le token et un message de confirmation
+        return response()->json(['token' => $token, 'message' => "Utilisateur crée avec succès."]);
     }
 
     public function logout()
     {
+        // Récupération du token JWT
         $token = JWTAuth::getToken();
 
+        // Invalidation du token
         if ($token) {
             try {
                 JWTAuth::invalidate($token);
             } catch (JWTException $e) {
-                return response()->json(['error' => 'requête echoué'], 500);
+                return response()->json(['error' => 'Requête échouée'], 500);
             }
         }
 
+        // Déconnexion de l'utilisateur
         if (Auth::user()) {
             Auth::logout();
-            return response()->json(['message' => 'Deconnexion réussie']);
+            return response()->json(['message' => 'Déconnexion réussie']);
         }
     }
 
     public function refreshToken()
     {
+        // Tentative de rafraîchissement du token
         try {
             $token = JWTAuth::parseToken()->refresh();
         } catch (TokenExpiredException $e) {
@@ -79,6 +85,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Erreur lors de la création du token'], 500);
         }
 
+        // Retourne le nouveau token
         return response()->json(['token' => $token]);
     }
 }
